@@ -25,7 +25,7 @@ class oe_api():
         return( parsed )
 
 
-    def GetAccountDetails(self):
+    def account_details(self):
 
         response = self._get(f"https://api.octopus.energy/v1/accounts/{self.account_number}")
 

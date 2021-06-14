@@ -1,52 +1,51 @@
-[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE) [![boggle_test Actions Status](https://github.com/euanacampbell/boggle_solver/workflows/boggle_test/badge.svg)](https://github.com/euanacampbell/boggle_solver/actions)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 
-GitHub: [github.com/euanacampbell/boggle_solver](https://github.com/euanacampbell/boggle_solver)
+GitHub: [github.com/euanacampbell/octopus_energy_api](https://github.com/euanacampbell/octopus_energy_api)
 
-PyPi: [pypi.org/project/boggle-solver](https://pypi.org/project/boggle-solver/)
+PyPi: [pypi.org/project/octopus-energy-api](https://pypi.org/project/octopus-energy-api/)
 
 ## Installation
 
 ```bash
-pip3 install boggle-solver
+pip install octopus-energy-api
 ```
 
 ## Import
 
 ```python
-from boggle_solver import *
+from octopus_energy_api import oe_api
 ```
 
 ## Usage
-Create a 2-dimensional array and pass this into the package.
+Create an API instance. Access details can be found using this fantastic tutorial by Guy Lipman [guylipman.medium.com](https://guylipman.medium.com/accessing-your-octopus-smart-meter-data-3f3905ca8fec)
 
 ```python
-from boggle_solver import *
+from octopus_energy_api import oe_api
 
-grid = [
-        ['M','A','P'],
-        ['E','T','E'],
-        ['D','E','N'],
-       ]
+api_key = ""
+mpan = ""
+serial_number = ""
+account_number = ""
 
-boggle=Grid(grid)
+energy_api = oe_api(api_key, mpan, serial_number, account_number)
 ```
 
 To confirm this worked, the below function can be used.
 
 ```python
-boggle.print_grid()
-
-['M', 'A', 'P']
-['E', 'T', 'E']
-['D', 'E', 'N']
+energy_api.account_details()
 ```
 
-Now search for all words. This will take ~20 seconds for a 3x3 grid.
+## Getting Consumption Data
 
 ```python
-words = boggle.find_all_words()
+from octopus_energy_api import oe_api
+import datetime
 
-print(words[:10])
+energy_api = oe_api(api_key, mpan, serial_number, account_number)
 
-['MEAT', 'MET', 'METED', 'MEET', 'MAT', 'MATE', 'MATED', 'MAP', 'EDEN', 'EAT']
+today = datetime.date.today() # setting end date to today
+start = today.replace(day=1) # setting start date to the beginning of the month
+
+energy_api.get_consumption(start, today)
 ```
