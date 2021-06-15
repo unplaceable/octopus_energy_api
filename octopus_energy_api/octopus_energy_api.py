@@ -65,13 +65,11 @@ class oe_api():
 
         return(response)
 
-    def GetConsumption(self):
+    def products(self):
 
-        self._get(f"https://api.octopus.energy/v1/electricity-meter-points/{self.mpan}/meters/{self.serial_number}/consumption/?page_size=100&period_from=2021-02-15T00:00Z&period_to=2021-03-01T01:29Z&order_by=period")
+        response = self._get(f"https://api.octopus.energy/v1/products/?brand=OCTOPUS_ENERGY")
 
-    def GetProduct(self):
-
-        self._get(f"https://api.octopus.energy/v1/products/?brand=OCTOPUS_ENERGY")
+        return(response)
 
     def convert_datetime_to_tz(cls, time):
         
@@ -79,7 +77,7 @@ class oe_api():
 
         return(time.strftime(format_tz))
     
-    def get_consumption(self, start, end):
+    def consumption(self, start, end):
         
         start=self.convert_datetime_to_tz(start)
         end=self.convert_datetime_to_tz(end)

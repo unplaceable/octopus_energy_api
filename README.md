@@ -54,16 +54,26 @@ To confirm this worked, the below can be used. A valid response should be return
 energy_api.account_details()
 ```
 
-## Getting Consumption Data
+## Consumption Data
 
 ```python
 from octopus_energy_api import oe_api
 import datetime
 
-energy_api = oe_api(api_key, mpan, serial_number, account_number)
+energy_api = oe_api(api_key=api_key, mpan=mpan, serial_number=serial_number, account_number=account_number)
 
 today = datetime.date.today() # setting end date to today
 start = today.replace(day=1) # setting start date to the beginning of the month
 
-energy_api.get_consumption(start, today)
+energy_api.consumption(start, today)
+```
+
+## Product Data
+
+```python
+from octopus_energy_api import oe_api
+
+energy_api = oe_api(api_key=api_key, mpan=mpan, serial_number=serial_number, account_number=account_number)
+
+energy_api.products()
 ```
