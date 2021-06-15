@@ -23,6 +23,7 @@ Two ways of creating an API instance.
 
 ```python
 from octopus_energy_api import oe_api
+
 account_number = ""
 api_key = ""
 mpan = ""
