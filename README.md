@@ -29,7 +29,7 @@ mpan = ""
 serial_number = ""
 account_number = ""
 
-api = oe_api(api_key=api_key, mpan=mpan, serial_number=serial_number, account_number=account_number)
+energy_api = oe_api(api_key=api_key, mpan=mpan, serial_number=serial_number, account_number=account_number)
 ```
 
 #### Get mpan and serial numbers from account number + api key. (currently only works for single property accounts)
@@ -45,7 +45,7 @@ account_details = oe_api.get_mpan_serial(account_number, api_key)
 mpan = account_details['mpan']
 serial_number = account_details['serial_numbers'][1] # may have multiple
 
-api = oe_api(api_key=api_key, mpan=mpan, serial_number=serial_number, account_number=account_number)
+energy_api = oe_api(api_key=api_key, mpan=mpan, serial_number=serial_number, account_number=account_number)
 ```
 
 To confirm this worked, the below can be used. A valid response should be returned.
