@@ -4,27 +4,33 @@ import json
 
 class oe_api():
 
-    def __init__(self, api_key=None, mpan=None, serial_number=None, account_number=None):
+    def __init__(self, account_number, api_key, mpan=None, serial_number=None):
         
-        api_key = api_key
-        self.mpan = mpan
-        self.serial_number = serial_number
-        self.account_number = account_number
+        self.account_number=account_number
+
+        if not mpan and not serial_number:
+            account_details = self.get_mpan_serial(account_number, api_key)
+
+            self.mpan = account_details['mpan']
+            self.serial_number = account_details['serial_numbers'][1]
+        else:
+            self.mpan = mpan
+            self.serial_number = serial_number
 
         self.s = requests.session()
         self.s.auth = (api_key, "")
 
         self.base = "https://api.octopus.energy/v1"
     
-    def _get(self, url):
+    def _get(cls, url):
         
-        response = self.s.request(method="GET", url=url)
+        response = cls.s.request(method="GET", url=url)
 
         parsed = response.json()
 
         return( parsed )
 
-    def get_mpan_serial(account_number, api_key):
+    def get_mpan_serial(self, account_number, api_key):
         """Optionally load additional account details if not provided"""
 
         # details = self.account_details(account_number=account_number)

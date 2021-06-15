@@ -23,13 +23,12 @@ Two ways of creating an API instance.
 
 ```python
 from octopus_energy_api import oe_api
-
+account_number = ""
 api_key = ""
 mpan = ""
 serial_number = ""
-account_number = ""
 
-energy_api = oe_api(api_key=api_key, mpan=mpan, serial_number=serial_number, account_number=account_number)
+energy_api = oe_api(account_number, api_key, mpan=mpan, serial_number=serial_number)
 ```
 
 #### Get mpan and serial numbers from account number + api key. (currently only works for single property accounts)
@@ -40,9 +39,7 @@ from octopus_energy_api import oe_api
 api_key = "value here"
 account_number = "value here"
 
-account_details = oe_api.get_mpan_serial(account_number, api_key)
-
-energy_api = oe_api(api_key=api_key, mpan=account_details['mpan'], serial_number=account_details['serial_numbers'][1], account_number=account_number)
+energy_api = oe_api(account_number, api_key)
 ```
 
 To confirm this worked, the below can be used. A valid response should be returned.
@@ -57,7 +54,7 @@ energy_api.account_details()
 from octopus_energy_api import oe_api
 import datetime
 
-energy_api = oe_api(api_key=api_key, mpan=mpan, serial_number=serial_number, account_number=account_number)
+energy_api = oe_api(account_number, api_key, mpan=mpan, serial_number=serial_number)
 
 today = datetime.date.today() # setting end date to today
 start = today.replace(day=1) # setting start date to the beginning of the month
