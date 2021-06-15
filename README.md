@@ -72,3 +72,13 @@ energy_api = oe_api(account_number, api_key, mpan=mpan, serial_number=serial_num
 
 energy_api.products()
 ```
+
+## Product Data
+
+```python
+from octopus_energy_api import oe_api
+
+energy_api = oe_api(account_number, api_key, mpan=mpan, serial_number=serial_number)
+
+energy_api.meter_point()
+```

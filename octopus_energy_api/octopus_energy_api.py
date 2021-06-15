@@ -88,7 +88,6 @@ class oe_api():
         start=self.convert_datetime_to_tz(start)
         end=self.convert_datetime_to_tz(end)
 
-        url=self.base
         setup=f"/electricity-meter-points/{self.mpan}/meters/{self.serial_number}/consumption/"
         
         parameters=f"?page_size=10000&period_from={start}&period_to={end}&order_by=period"
@@ -98,3 +97,13 @@ class oe_api():
         response = self._get(url)
 
         return(response['results'])
+
+    def meter_point(self):
+
+        setup=f"/electricity-meter-points/{self.mpan}/"
+
+        url=f"{self.base}{setup}"
+
+        response = self._get(url)
+
+        return(response)
