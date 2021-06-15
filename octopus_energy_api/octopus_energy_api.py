@@ -4,7 +4,7 @@ import json
 
 class oe_api():
 
-    def __init__(self, api_key, mpan, serial_number, account_number):
+    def __init__(self, api_key=None, mpan=None, serial_number=None, account_number=None):
         
         api_key = api_key
         self.mpan = mpan
@@ -24,10 +24,44 @@ class oe_api():
 
         return( parsed )
 
+    def get_mpan_serial(account_number, api_key):
+        """Optionally load additional account details if not provided"""
 
-    def account_details(self):
+        # details = self.account_details(account_number=account_number)
+        url=f"https://api.octopus.energy/v1/accounts/{account_number}"
 
-        response = self._get(f"https://api.octopus.energy/v1/accounts/{self.account_number}")
+        s = requests.session()
+        s.auth = (api_key, "")
+        response = s.request(method="GET", url=url)
+        details = response.json()
+
+        to_return={}
+
+        # mpan
+        mpan = details['properties'][0]['electricity_meter_points'][0]['mpan']
+        to_return['mpan']=mpan
+
+        # serial numbers
+        meter_data = details['properties'][0]['electricity_meter_points'][0]['meters']
+        serials=[]
+
+        for meter in meter_data:
+            serial = meter['serial_number']
+
+            serials.append(serial)
+
+        to_return['serial_numbers']=serials
+
+        # return
+        return(to_return)
+
+
+    def account_details(self, account_number=None):
+        
+        if not account_number:
+            account_number=self.account_number
+        
+        response = self._get(f"https://api.octopus.energy/v1/accounts/{account_number}")
 
         return(response)
 

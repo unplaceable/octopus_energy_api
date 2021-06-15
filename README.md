@@ -17,7 +17,9 @@ from octopus_energy_api import oe_api
 ```
 
 ## Usage
-Create an API instance. Access details can be found using this fantastic tutorial by Guy Lipman [guylipman.medium.com](https://guylipman.medium.com/accessing-your-octopus-smart-meter-data-3f3905ca8fec)
+Two ways of creating an API instance.
+
+#### Load access details in manually - Can be found using this fantastic tutorial by Guy Lipman [guylipman.medium.com](https://guylipman.medium.com/accessing-your-octopus-smart-meter-data-3f3905ca8fec).
 
 ```python
 from octopus_energy_api import oe_api
@@ -27,10 +29,26 @@ mpan = ""
 serial_number = ""
 account_number = ""
 
-energy_api = oe_api(api_key, mpan, serial_number, account_number)
+api = oe_api(api_key=api_key, mpan=mpan, serial_number=serial_number, account_number=account_number)
 ```
 
-To confirm this worked, the below function can be used.
+#### Get mpan and serial numbers from account number + api key. (currently only works for single property accounts)
+
+```python
+from octopus_energy_api import oe_api
+
+api_key = "value here"
+account_number = "value here"
+
+account_details = oe_api.get_mpan_serial(account_number, api_key)
+
+mpan = account_details['mpan']
+serial_number = account_details['serial_numbers'][1] # may have multiple
+
+api = oe_api(api_key=api_key, mpan=mpan, serial_number=serial_number, account_number=account_number)
+```
+
+To confirm this worked, the below can be used. A valid response should be returned.
 
 ```python
 energy_api.account_details()
