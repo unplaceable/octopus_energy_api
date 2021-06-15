@@ -44,6 +44,7 @@ class oe_api():
         to_return={}
 
         # mpan
+        print(details)
         mpan = details['properties'][0]['electricity_meter_points'][0]['mpan']
         to_return['mpan']=mpan
 
