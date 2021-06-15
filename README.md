@@ -67,7 +67,7 @@ energy_api.consumption(start, today)
 ```python
 from octopus_energy_api import oe_api
 
-energy_api = oe_api(api_key=api_key, mpan=mpan, serial_number=serial_number, account_number=account_number)
+energy_api = oe_api(account_number, api_key, mpan=mpan, serial_number=serial_number)
 
 energy_api.products()
 ```
