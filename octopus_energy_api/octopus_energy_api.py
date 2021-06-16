@@ -83,11 +83,18 @@ class oe_api():
         return(time.strftime(format_tz))
     
     def consumption(self, start, end):
+
+        difference = end-start
+
+        print(f"difference: {difference.days}")
+
+        if difference.days > 365:
+            raise RuntimeError('time difference is greater than one year')
         
         start=self.convert_datetime_to_tz(start)
         end=self.convert_datetime_to_tz(end)
 
-        setup=f"/electricity-meter-points/{self.mpan}/meters/{self.serial_number}/consumption/"
+        setup=f"/electricity-meter-points/{self.mpan}/meters/{self.serial_number}/consumption?page_size=25000"
         
         parameters=f"?page_size=10000&period_from={start}&period_to={end}&order_by=period"
 

@@ -1,15 +1,16 @@
 from octopus_energy_api import oe_api
-import datetime
+from datetime import datetime, timedelta
 import os
 
 api_key = os.environ.get('API_KEY')
 account_number = os.environ.get('ACCOUNT_NUMBER')
 
 energy_api = oe_api(account_number, api_key)
-# print(energy_api.account_details()['properties'][0]['moved_in_at'])
+# print(energy_api.account_details())
 
-today = datetime.date.today()
-start = today.replace(day=1)
+
+today = datetime.today()
+start = today - timedelta(days=400)
 
 
 print(energy_api.consumption_total(start, today))
