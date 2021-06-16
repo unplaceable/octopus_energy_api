@@ -8,10 +8,6 @@ class oe_api():
         
         self.account_number=account_number
 
-        print('here')
-        print(account_number)
-        print(api_key)
-
         if not mpan and not serial_number:
             account_details = self.get_mpan_serial(account_number, api_key)
 

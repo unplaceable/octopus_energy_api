@@ -1,7 +1,8 @@
 from octopus_energy_api import oe_api
+import os
 
-api_key = ""
-account_number = ""
+api_key = os.environ.get('API_KEY')
+account_number = os.environ.get('ACCOUNT_NUMBER')
 
 # account_details = oe_api.get_mpan_serial(account_number, api_key)
 
