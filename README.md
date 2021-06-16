@@ -49,8 +49,9 @@ To confirm this worked, the below can be used. A valid response should be return
 energy_api.account_details()
 ```
 
-## Consumption Data
+## Consumption
 
+Getting all consumption data.
 ```python
 from octopus_energy_api import oe_api
 import datetime
@@ -63,7 +64,24 @@ start = today.replace(day=1) # setting start date to the beginning of the month
 energy_api.consumption(start, today)
 ```
 
-## Product Data
+Getting calculated consumption data - total, mean, and median.
+```python
+from octopus_energy_api import oe_api
+import datetime
+
+energy_api = oe_api(account_number, api_key, mpan=mpan, serial_number=serial_number)
+
+today = datetime.date.today() # setting end date to today
+start = today.replace(day=1) # setting start date to the beginning of the month
+
+energy_api.consumption_total(start, today)
+
+energy_api.consumption_mean(start, today)
+
+energy_api.consumption_median(start, today)
+```
+
+## Products
 
 ```python
 from octopus_energy_api import oe_api
@@ -73,7 +91,7 @@ energy_api = oe_api(account_number, api_key, mpan=mpan, serial_number=serial_num
 energy_api.products()
 ```
 
-## Product Data
+## Meter Information
 
 ```python
 from octopus_energy_api import oe_api

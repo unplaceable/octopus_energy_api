@@ -1,6 +1,7 @@
 import requests
 from requests.auth import HTTPBasicAuth
 import json
+import statistics
 
 class oe_api():
 
@@ -44,7 +45,6 @@ class oe_api():
         to_return={}
 
         # mpan
-        print(details)
         mpan = details['properties'][0]['electricity_meter_points'][0]['mpan']
         to_return['mpan']=mpan
 
@@ -98,6 +98,47 @@ class oe_api():
         response = self._get(url)
 
         return(response['results'])
+
+    def consumption_total(self, start, end):
+        """Calculates the amount of kWh used in the timeframe given, returns the value as a float"""
+
+        consumption=self.consumption(start, end)
+
+        total_consumption = 0
+
+        for record in consumption:
+            total_consumption+=record['consumption']
+        
+        total_consumption = float('%.2f' % total_consumption)
+        
+        return(total_consumption)
+    
+    def consumption_mean(self, start, end):
+        """Calculates the average kWh used in 30 minutes within the timeframe given, returns the value as a float"""
+
+        consumption=self.consumption(start, end)
+
+        consumption_list = []
+
+        for record in consumption:
+            consumption_list.append(record['consumption'])
+        
+        average = float('%.2f' % float(sum(consumption_list) / len(consumption_list)))
+        
+        return(average)
+
+    def consumption_median(self, start, end):
+
+        consumption=self.consumption(start, end)
+
+        consumption_list = []
+
+        for record in consumption:
+            consumption_list.append(record['consumption'])
+
+        median = statistics.median(consumption_list)
+
+        return(median)
 
     def meter_point(self):
 
