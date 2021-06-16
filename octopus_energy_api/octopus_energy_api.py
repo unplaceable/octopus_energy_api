@@ -1,6 +1,4 @@
 import requests
-from requests.auth import HTTPBasicAuth
-import json
 import statistics
 
 class oe_api():
@@ -45,11 +43,11 @@ class oe_api():
         to_return={}
 
         # mpan
-        mpan = details['properties'][0]['electricity_meter_points'][0]['mpan']
+        mpan = details['properties'][0]['electricity_meter_points'][-1]['mpan']
         to_return['mpan']=mpan
 
         # serial numbers
-        meter_data = details['properties'][0]['electricity_meter_points'][0]['meters']
+        meter_data = details['properties'][0]['electricity_meter_points'][-1]['meters']
         serials=[]
 
         for meter in meter_data:

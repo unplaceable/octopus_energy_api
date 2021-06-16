@@ -11,11 +11,12 @@ energy_api = oe_api(account_number, api_key)
 today = datetime.date.today()
 start = today.replace(day=1)
 
-energy_api.consumption_total(start, today)
 
-energy_api.consumption_mean(start, today)
+print(energy_api.consumption_total(start, today))
 
-energy_api.consumption_median(start, today)
+print(energy_api.consumption_mean(start, today))
+
+print(energy_api.consumption_median(start, today))
 
 
 # print(energy_api.account_details())
