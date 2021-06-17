@@ -86,8 +86,6 @@ class oe_api():
 
         difference = end-start
 
-        print(f"difference: {difference.days}")
-
         if difference.days > 365:
             raise RuntimeError('time difference is greater than one year')
         
@@ -144,6 +142,20 @@ class oe_api():
         median = statistics.median(consumption_list)
 
         return(median)
+
+    def consumption_cost(self, start, end, rate: float):
+        """Calculates the amount of kWh used in the timeframe given, returns the value as a float"""
+
+        consumption=self.consumption(start, end)
+
+        total_consumption = 0
+
+        for record in consumption:
+            total_consumption+=record['consumption']
+        
+        total_consumption = float('%.2f' % total_consumption)
+        
+        return(total_consumption*rate)
 
     def meter_point(self):
 

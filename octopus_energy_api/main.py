@@ -10,7 +10,7 @@ energy_api = oe_api(account_number, api_key)
 
 
 today = datetime.today()
-start = today - timedelta(days=400)
+start = today - timedelta(days=300)
 
 
 print(energy_api.consumption_total(start, today))
@@ -18,6 +18,8 @@ print(energy_api.consumption_total(start, today))
 print(energy_api.consumption_mean(start, today))
 
 print(energy_api.consumption_median(start, today))
+
+print(energy_api.consumption_cost(start, today, 2.73))
 
 
 # print(energy_api.account_details())

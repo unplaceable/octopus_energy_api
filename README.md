@@ -37,14 +37,13 @@ energy_api = oe_api(account_number, api_key, mpan=mpan, serial_number=serial_num
 ```python
 from octopus_energy_api import oe_api
 
-api_key = "value here"
-account_number = "value here"
+api_key = "value"
+account_number = "value"
 
 energy_api = oe_api(account_number, api_key)
 ```
 
-To confirm this worked, the below can be used. A valid response should be returned.
-
+## Account Details
 ```python
 energy_api.account_details()
 ```
@@ -53,11 +52,6 @@ energy_api.account_details()
 
 Getting all consumption data.
 ```python
-from octopus_energy_api import oe_api
-import datetime
-
-energy_api = oe_api(account_number, api_key, mpan=mpan, serial_number=serial_number)
-
 today = datetime.date.today() # setting end date to today
 start = today.replace(day=1) # setting start date to the beginning of the month
 
@@ -66,11 +60,6 @@ energy_api.consumption(start, today)
 
 Getting calculated consumption data - total, mean, and median.
 ```python
-from octopus_energy_api import oe_api
-import datetime
-
-energy_api = oe_api(account_number, api_key, mpan=mpan, serial_number=serial_number)
-
 today = datetime.date.today() # setting end date to today
 start = today.replace(day=1) # setting start date to the beginning of the month
 
@@ -81,22 +70,24 @@ energy_api.consumption_mean(start, today)
 energy_api.consumption_median(start, today)
 ```
 
+Price of consumption.
+```python
+today = datetime.today()
+start = today - timedelta(days=300)
+
+electric_rate = 2.73
+
+energy_api.consumption_cost(start, today, electric_rate)
+```
+
 ## Products
 
 ```python
-from octopus_energy_api import oe_api
-
-energy_api = oe_api(account_number, api_key, mpan=mpan, serial_number=serial_number)
-
 energy_api.products()
 ```
 
 ## Meter Information
 
 ```python
-from octopus_energy_api import oe_api
-
-energy_api = oe_api(account_number, api_key, mpan=mpan, serial_number=serial_number)
-
 energy_api.meter_point()
 ```
