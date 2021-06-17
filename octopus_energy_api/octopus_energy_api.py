@@ -1,3 +1,4 @@
+from datetime import datetime
 import requests
 import statistics
 
@@ -62,6 +63,7 @@ class oe_api():
 
 
     def account_details(self, account_number=None):
+        """See account data"""
         
         if not account_number:
             account_number=self.account_number
@@ -71,6 +73,7 @@ class oe_api():
         return(response)
 
     def products(self):
+        """Get all product info for Octopus Energy"""
 
         response = self._get(f"https://api.octopus.energy/v1/products/?brand=OCTOPUS_ENERGY")
 
@@ -82,7 +85,8 @@ class oe_api():
 
         return(time.strftime(format_tz))
     
-    def consumption(self, start, end):
+    def consumption(self, start: datetime, end: datetime):
+        """Get all consumption data between 2 datetimes"""
 
         difference = end-start
 
@@ -102,7 +106,7 @@ class oe_api():
 
         return(response['results'])
 
-    def consumption_total(self, start, end):
+    def consumption_total(self, start: datetime, end: datetime):
         """Calculates the amount of kWh used in the timeframe given, returns the value as a float"""
 
         consumption=self.consumption(start, end)
@@ -116,7 +120,7 @@ class oe_api():
         
         return(total_consumption)
     
-    def consumption_mean(self, start, end):
+    def consumption_mean(self, start: datetime, end: datetime):
         """Calculates the average kWh used in 30 minutes within the timeframe given, returns the value as a float"""
 
         consumption=self.consumption(start, end)
@@ -130,7 +134,8 @@ class oe_api():
         
         return(average)
 
-    def consumption_median(self, start, end):
+    def consumption_median(self, start: datetime, end: datetime):
+        """Median of all rates during times stated"""
 
         consumption=self.consumption(start, end)
 
@@ -143,8 +148,9 @@ class oe_api():
 
         return(median)
 
-    def consumption_cost(self, start, end, rate: float):
-        """Calculates the amount of kWh used in the timeframe given, returns the value as a float"""
+    def consumption_cost(self, start: datetime, end: datetime, rate: float):
+        """Calculates the cost of electricity given during the times stated.
+        Does not check actual unit rates per hour."""
 
         consumption=self.consumption(start, end)
 
