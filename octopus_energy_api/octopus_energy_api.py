@@ -1,84 +1,41 @@
+
+from octopus_energy_api.api_interface import api
+from octopus_energy_api.account import account
+from octopus_energy_api.urls import urls
+
 from datetime import datetime
-import requests
 import statistics
 
 class oe_api():
 
     def __init__(self, account_number, api_key, mpan=None, serial_number=None):
-        
-        self.account_number=account_number
 
-        if not mpan and not serial_number:
-            account_details = self.get_mpan_serial(account_number, api_key)
+        self._urls = urls
 
-            self.mpan = account_details['mpan']
-            self.serial_number = account_details['serial_numbers'][1]
-        else:
-            self.mpan = mpan
-            self.serial_number = serial_number
+        self._api = api(api_key)
 
-        self.s = requests.session()
-        self.s.auth = (api_key, "")
+        # setup account
+        account_url = self._urls.accounts_url(account_number)
+        account_details = self._api.run(account_url)
+        self.account = account(account_details)
 
-        self.base = "https://api.octopus.energy/v1"
-    
-    def _get(cls, url):
-        
-        response = cls.s.request(method="GET", url=url)
-
-        parsed = response.json()
-
-        return( parsed )
-
-    def get_mpan_serial(self, account_number, api_key):
-        """Optionally load additional account details if not provided"""
-
-        # details = self.account_details(account_number=account_number)
-        url=f"https://api.octopus.energy/v1/accounts/{account_number}"
-
-        s = requests.session()
-        s.auth = (api_key, "")
-        response = s.request(method="GET", url=url)
-        details = response.json()
-
-        to_return={}
-
-        # mpan
-        mpan = details['properties'][0]['electricity_meter_points'][-1]['mpan']
-        to_return['mpan']=mpan
-
-        # serial numbers
-        meter_data = details['properties'][0]['electricity_meter_points'][-1]['meters']
-        serials=[]
-
-        for meter in meter_data:
-            serial = meter['serial_number']
-
-            serials.append(serial)
-
-        to_return['serial_numbers']=serials
-
-        # return
-        return(to_return)
-
-
-    def account_details(self, account_number=None):
+    def account_details(self):
         """See account data"""
         
-        if not account_number:
-            account_number=self.account_number
+        url = self._urls.accounts_url(self.account.number)
         
-        response = self._get(f"https://api.octopus.energy/v1/accounts/{account_number}")
+        response = self._api.run(url)
 
         return(response)
 
     def products(self):
         """Get all product info for Octopus Energy"""
 
-        response = self._get(f"https://api.octopus.energy/v1/products/?brand=OCTOPUS_ENERGY")
+        response = self._api.run(self._urls.products_url())
 
         return(response)
-
+    
+    @classmethod
     def convert_datetime_to_tz(cls, time):
         
         format_tz='%Y-%m-%dT%H:%M:%S%z'
@@ -88,21 +45,14 @@ class oe_api():
     def consumption(self, start: datetime, end: datetime):
         """Get all consumption data between 2 datetimes"""
 
-        difference = end-start
-
-        if difference.days > 365:
+        if (end-start).days > 365:
             raise RuntimeError('time difference is greater than one year')
         
         start=self.convert_datetime_to_tz(start)
         end=self.convert_datetime_to_tz(end)
 
-        setup=f"/electricity-meter-points/{self.mpan}/meters/{self.serial_number}/consumption?page_size=25000"
-        
-        parameters=f"?page_size=10000&period_from={start}&period_to={end}&order_by=period"
-
-        url=f"{self.base}{setup}{parameters}"
-
-        response = self._get(url)
+        url = self._urls.consumption_url(self.account.mpan, self.account.serial_number, start, end)
+        response = self._api.run(url)
 
         return(response['results'])
 
@@ -115,7 +65,7 @@ class oe_api():
 
         for record in consumption:
             total_consumption+=record['consumption']
-        
+
         total_consumption = float('%.2f' % total_consumption)
         
         return(total_consumption)
@@ -165,10 +115,8 @@ class oe_api():
 
     def meter_point(self):
 
-        setup=f"/electricity-meter-points/{self.mpan}/"
+        url = self._urls.meter_point_url(self.account.mpan)
 
-        url=f"{self.base}{setup}"
-
-        response = self._get(url)
+        response = self._api.run(url)
 
         return(response)
